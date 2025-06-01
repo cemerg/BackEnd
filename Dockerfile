@@ -1,13 +1,27 @@
-# Use the official .NET SDK image for building
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-COPY . .
-RUN dotnet publish -c Release -o out
+WORKDIR /src
 
-# Use the ASP.NET runtime image for running
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out .
+# Copy solution and restore
+COPY BackEndApp.sln ./
+COPY Api/Api.csproj ./Api/
+COPY Application/Application.csproj ./Application/
+COPY Domain/Domain.csproj ./Domain/
+COPY Infrastructure/Infrastructure.csproj ./Infrastructure/
 
-# Replace with your actual DLL name
-ENTRYPOINT ["dotnet", "YourProject.dll"]
+RUN dotnet restore
+
+# Copy the rest of the files and publish
+COPY . ./
+WORKDIR /src/Api
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "Api.dll"]
