@@ -1,0 +1,21 @@
+app = "my-dotnet-api"
+primary_region = "fra"
+
+[build]
+  image = "mcr.microsoft.com/dotnet/aspnet:8.0" # optional if using Dockerfile
+
+[env]
+  ASPNETCORE_URLS = "http://+:8080"
+  DOTNET_RUNNING_IN_CONTAINER = "true"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
