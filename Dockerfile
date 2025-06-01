@@ -3,17 +3,17 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy solution and restore
-COPY ./BackEndApp.sln ./
-COPY ./Api/Api.csproj ./Api/
-COPY ./Application/Application.csproj ./Application/
-COPY ./Domain/Domain.csproj ./Domain/
-COPY ./Infrastructure/Infrastructure.csproj ./Infrastructure/
+COPY BackEndApp.sln ./
+COPY API/API.csproj ./API/
+COPY Application/Application.csproj ./Application/
+COPY Domain/Domain.csproj ./Domain/
+COPY Infrastructure/Infrastructure.csproj ./Infrastructure/
 
 RUN dotnet restore
 
 # Copy the rest of the files and publish
 COPY . ./
-WORKDIR /src/Api
+WORKDIR /src/API
 RUN dotnet publish -c Release -o /app/publish
 
 # Stage 2: Runtime
