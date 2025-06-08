@@ -48,12 +48,19 @@ public class TransactionService(IUnitOfWork unitOfWork) : ITransactionService
 
 public class CustomerService(IUnitOfWork unitOfWork) : ICustomerService
 {
-    public async Task<CustomerDto?> GetOverviewByCustomerId(Guid customerId)
+    public async Task<CustomerOverviewResponse> GetOverviewByCustomerId(Guid customerId)
     {
         var customer = await unitOfWork.CustomerRepository.GetByIdAsync(customerId);
         if (customer == null)
         {
-            return null;
+            return new CustomerOverviewResponse
+            {
+                CustomerId = customerId,
+                CustomerPoints = 0,
+                Email = null,
+                Name = null,
+                RecentTransactions = new List<TransactionDto>()
+            };
         }
 
         return CustomerDto.FromEntity(customer);

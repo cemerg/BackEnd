@@ -12,7 +12,7 @@ public interface ITransactionService
 
 public interface ICustomerService
 {
-    Task<CustomerDto?> GetOverviewByCustomerId(Guid customerId);
+    Task<CustomerOverviewResponse> GetOverviewByCustomerId(Guid customerId);
     Task<IEnumerable<TransactionDto>> GetTransactionsByCustomerGuid(Guid customerId);
     Task RedeemPoints(RedeemPointsRequest request);
     Task RegisterCustomer(RegisterCustomerRequest request, string? externalId = null);
