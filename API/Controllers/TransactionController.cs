@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
 [Route("api/transaction")]
-[Produces("application/json")]
-public class TransactionController(ITransactionService transactionService) : ControllerBase
+public class TransactionController(ITransactionService transactionService) : BaseController
 {
 
     [HttpPost("create")]
@@ -17,14 +15,5 @@ public class TransactionController(ITransactionService transactionService) : Con
         var response = await transactionService.CreateTransaction(request);
         return Ok(response);
     }
-
-
-    [HttpPost("set-customer")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> SetCustomer([FromBody] SetCustomerRequest request)
-    {
-        await transactionService.SetCustomer(request);
-        return Ok();
-    }
+    
 }

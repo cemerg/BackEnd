@@ -1,7 +1,8 @@
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Events;
 
-public class TransactionService(IUnitOfWork unitOfWork) : ITransactionService
+public class TransactionService(IUnitOfWork unitOfWork, IEventPublisher eventPublisher) : ITransactionService
 {
     public async Task<TransactionDto> CreateTransaction(CreateTransactionRequest createTransactionRequest)
     {
@@ -24,6 +25,14 @@ public class TransactionService(IUnitOfWork unitOfWork) : ITransactionService
 
         await unitOfWork.TransactionRepository.AddAsync(transaction);
         await unitOfWork.SaveChangesAsync();
+
+        var transactionCreatedEvent = new TransactionCreatedEvent(
+            transaction.Id,
+            transaction.Point,
+            transaction.CreatedAt
+        );
+
+        eventPublisher.Publish(transactionCreatedEvent);
         return TransactionDto.FromEntity(transaction);
     }
 

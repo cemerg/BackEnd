@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
 [Route("api/application")]
-[Produces("application/json")]
-public class ApplicationController(IApplicationService applicationService) : ControllerBase
+public class ApplicationController(IApplicationService applicationService) : BaseController
 {
 
     [HttpGet]

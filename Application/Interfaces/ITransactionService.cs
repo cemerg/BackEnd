@@ -5,7 +5,6 @@ namespace Application.Interfaces;
 public interface ITransactionService
 {
     Task<TransactionDto> CreateTransaction(CreateTransactionRequest createTransactionRequest);
-    Task SetCustomer(SetCustomerRequest request);
 }
 
 

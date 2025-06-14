@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
 [Route("api/customer")]
-[Produces("application/json")]
-public class CustomerController(ICustomerService customerService) : ControllerBase
+public class CustomerController(ICustomerService customerService) : BaseController
 {
 
     [HttpGet("transactions")]

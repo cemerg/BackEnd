@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
 [Route("api/product")]
-[Produces("application/json")]
-public class ProductController(IProductService productService) : ControllerBase
+public class ProductController(IProductService productService) : BaseController
 {
 
     [HttpPost("create")]

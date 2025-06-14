@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Infrastructure.Messaging;
+using Infrastructure.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,6 +56,8 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+
+builder.Services.AddScoped<INotificationPublisher, SignalRNotificationPublisher>();
 
 
 var app = builder.Build();
