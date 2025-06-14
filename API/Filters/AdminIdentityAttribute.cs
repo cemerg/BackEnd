@@ -15,9 +15,5 @@ public class AdminIdentityAttribute : ActionFilterAttribute
         {
             adminContext.AdminUserId = adminUserId;
         }
-        else
-        {
-            throw new ArgumentException("Admin User ID is missing or invalid in the request header.");
-        }
     }
 }

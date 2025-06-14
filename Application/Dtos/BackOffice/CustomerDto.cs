@@ -26,8 +26,8 @@ public class BackOfficeTransactionDto
 {
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public decimal TotalAmount { get; set; }
-    public Guid CustomerId { get; set; }
+    public int Point { get; set; }
+    public Guid? CustomerId { get; set; }
 
     public static BackOfficeTransactionDto FromEntity(Transaction transaction)
     {
@@ -35,6 +35,8 @@ public class BackOfficeTransactionDto
         {
             Id = transaction.Id,
             CreatedAt = transaction.CreatedAt,
+            CustomerId = transaction.CustomerId,
+            Point = transaction.Point
         };
     }
 }
