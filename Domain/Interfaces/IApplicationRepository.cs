@@ -9,6 +9,7 @@ public interface IApplicationRepository
 public interface IProductRepository
 {
     Task CreateProduct(Product product);
+    void DeleteProduct(Product product);
     Task<Product?> GetByIdAsync(Guid productId);
     Task<IEnumerable<Product>> GetProductsAsync();
     Task SaveChangesAsync();

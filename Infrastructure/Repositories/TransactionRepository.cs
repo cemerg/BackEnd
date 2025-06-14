@@ -15,7 +15,16 @@ public class TransactionRepository : ITransactionRepository
         await _context.Set<Transaction>().AddAsync(transaction);
     }
 
-
+    public async Task<IEnumerable<Transaction>> GetAllAsync(int skip, int take)
+    {
+        return await _context.Set<Transaction>()
+            .Include(t => t.Customer)
+            .Include(t => t.TransactionProducts)
+            .OrderByDescending(t => t.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+    }
 
     public async Task<IEnumerable<Transaction>> GetByCustomerIdAsync(Guid customerId)
     {
@@ -53,6 +62,16 @@ public class CustomerRepository : ICustomerRepository
     public async Task AddAsync(Customer customer)
     {
         await _context.Set<Customer>().AddAsync(customer);
+    }
+
+    public async Task<IEnumerable<Customer>> GetAllAsync(int skip, int take)
+    {
+        return await _context.Set<Customer>()
+            .Include(c => c.Transactions)
+            .OrderBy(c => c.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
     }
 
     public async Task<Customer?> GetByExternalIdAsync(string externalId)

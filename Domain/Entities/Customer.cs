@@ -1,9 +1,10 @@
 namespace Domain.Entities;
 
-public class Customer : BaseEntity
+public class Customer : BaseEntityWithDateTime
 {
     public string? ExternalId { get; set; }
     public int Point { get; set; }
+    public string? Name { get; set; }
     public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     public static Customer Create(Guid? guid = null, string? externalId = null)

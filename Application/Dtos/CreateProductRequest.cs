@@ -9,3 +9,15 @@ public class CreateProductRequest
         Point = point;
     }
 }
+
+public class UpdateProductRequest
+{
+    public required string Name { get; set; }
+    public int Point { get; set; }
+
+    public UpdateProductRequest(string name, int point)
+    {
+        Name = name;
+        Point = point;
+    }
+}

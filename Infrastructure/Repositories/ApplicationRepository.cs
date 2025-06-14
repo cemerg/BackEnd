@@ -30,6 +30,11 @@ public class ProductRepository  : IProductRepository
         await _context.Set<Product>().AddAsync(product);
     }
 
+    public void DeleteProduct(Product product)
+    {
+        _context.Set<Product>().Remove(product);
+    }
+
     public async Task<Product?> GetByIdAsync(Guid productId)
     {
         return await _context.Set<Product>().FindAsync(productId);

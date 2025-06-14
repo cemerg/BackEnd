@@ -1,19 +1,20 @@
-
-public class TransactionDto
+public class CustomerTransactionDto
 {
     public Guid Id { get; internal set; }
     public int Point { get; internal set; }
     public TransactionType Type { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public string CustomerName { get; private set; }
 
-    public static TransactionDto FromEntity(Domain.Entities.Transaction transaction)
+    public static CustomerTransactionDto FromEntity(Domain.Entities.Transaction transaction, string customerName)
     {
-        return new TransactionDto
+        return new CustomerTransactionDto
         {
             Id = transaction.Id,
             Point = transaction.Point,
             Type = transaction.Type,
-            CreatedAt = transaction.CreatedAt
+            CreatedAt = transaction.CreatedAt,
+            CustomerName = customerName
         };
     }
 
@@ -25,5 +26,4 @@ public class TransactionDto
             Point = Point
         };
     }
-
 }

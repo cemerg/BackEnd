@@ -1,6 +1,5 @@
 using Application.Interfaces;
 using Infrastructure.Messaging;
-using Infrastructure.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +16,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Bind directly and register singleton
+var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+if (appSettings == null)
+{
+    throw new InvalidOperationException("AppSettings configuration section is missing or invalid.");
+}
+
+builder.Services.AddSingleton(appSettings);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -30,7 +38,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidIssuer = "https://accounts.google.com",
         ValidateAudience = true,
-        ValidAudiences = [builder.Configuration["Google:ClientId"]],
+        ValidAudiences = [appSettings.Google.ClientId],
         ValidateLifetime = true
     };
 });
@@ -49,7 +57,6 @@ builder.Services.AddSingleton<IEventPublisher, ConsoleEventPublisher>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -57,13 +64,20 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
-builder.Services.AddScoped<INotificationPublisher, SignalRNotificationPublisher>();
+
+builder.Services.AddScoped<ICustomerContext, CustomerContext>();
+builder.Services.AddScoped<IAdminContext, AdminContext>();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 
 
 var app = builder.Build();
 
+
 app.UseSwagger();
 app.UseSwaggerUI();
+
 
 // Use CORS middleware before routing/endpoints
 app.UseCors("AllowAll");
@@ -71,7 +85,6 @@ app.UseCors("AllowAll");
 app.UseRouting();
 
 app.UseAuthorization();
-
 
 app.MapControllers();
 

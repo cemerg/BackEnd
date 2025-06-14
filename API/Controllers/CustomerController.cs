@@ -1,52 +1,63 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Dtos.WebSite;
 
 namespace API.Controllers;
 
 [Route("api/customer")]
+[CustomerIdentity]
 public class CustomerController(ICustomerService customerService) : BaseController
 {
 
     [HttpGet("transactions")]
-    public async Task<IActionResult> GetTransactions([FromQuery] Guid customerId)
+    [ProducesResponseType(typeof(IEnumerable<TransactionDto>), 200)]
+    public async Task<IActionResult> GetTransactions()
     {
-        var transactions = await customerService.GetTransactionsByCustomerGuid(customerId);
+        var transactions = await customerService.GetTransactions();
         return Ok(transactions);
     }
 
 
-    [HttpGet("overview")]
-    public async Task<IActionResult> Get([FromQuery] Guid customerId)
+    [HttpGet]
+    [ProducesResponseType(typeof(CustomerDto), 200)]
+    public async Task<IActionResult> GetCustomer()
     {
-        var transactions = await customerService.GetOverviewByCustomerId(customerId);
-        return Ok(transactions);
+        var customer = await customerService.GetCustomer();
+        if (customer == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(customer);
     }
 
 
-    [HttpPost("register-with-google")]
     [Authorize]
-    public async Task<IActionResult> RegisterWithGoogle([FromBody] RegisterCustomerRequest request)
+    [HttpPost("register-with-google")]
+    [ProducesResponseType(typeof(CustomerDto), 200)]
+    public async Task<IActionResult> RegisterWithGoogle()
     {
         var externalId = User.FindFirst("sub")?.Value;
-        await customerService.RegisterCustomer(request, externalId);
-        return Ok();
+        await customerService.RegisterCustomer(externalId);
+        return Ok(await customerService.GetCustomer());
+
     }
 
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterCustomerRequest request)
+    [ProducesResponseType(typeof(CustomerDto), 200)]
+    public async Task<IActionResult> Register()
     {
-        await customerService.RegisterCustomer(request);
-        return Ok();
+        await customerService.RegisterCustomer();
+        return Ok(await customerService.GetCustomer());
     }
 
     [HttpPost("redeem-points")]
+    [ProducesResponseType(typeof(CustomerDto), 200)]
     public async Task<IActionResult> RedeemPoints([FromBody] RedeemPointsRequest request)
     {
         await customerService.RedeemPoints(request);
-        return Ok();
+        return Ok(await customerService.GetCustomer());
     }
-
-
 }

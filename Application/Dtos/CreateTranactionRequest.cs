@@ -9,19 +9,14 @@ public class TransactionProductRequest
     public int Quantity { get; set; }
 }
 
-public class SetCustomerRequest
+public class SetTransactionToCustomerRequest
 {
     public Guid CustomerId { get; set; }
     public Guid TransactionId { get; set; }
 }
 
-public class RegisterCustomerRequest
-{
-    public Guid CustomerId { get; set; }
-}
 
 public class RedeemPointsRequest
 {
-    public Guid CustomerId { get; set; }
     public int Points { get; set; }
 }
