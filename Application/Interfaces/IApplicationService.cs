@@ -18,12 +18,12 @@ public interface IProductService
 
 public interface IAdminService
 {
-    Task<IEnumerable<Dtos.BackOffice.CustomerDto>> GetAllCustomers(Pagination pagination);
-    Task<IEnumerable<Dtos.BackOffice.TransactionDto>> GetAllTransactions(Pagination pagination);
-    Task<Dtos.BackOffice.CustomerDto?> GetCustomerById(Guid customerId);
-    Task<Dtos.BackOffice.TransactionDto?> GetTransactionById(Guid transactionId);
-    Task<IEnumerable<Dtos.BackOffice.TransactionDto>> GetTransactionsByCustomerGuid(Guid customerId, Pagination pagination);
-    Task<Dtos.BackOffice.TransactionDto?> SetTransactionToCustomer(SetTransactionToCustomerRequest setCustomerRequest);
+    Task<IEnumerable<Dtos.BackOffice.BackOfficeCustomerDto>> GetAllCustomers(Pagination pagination);
+    Task<IEnumerable<Dtos.BackOffice.BackOfficeTransactionDto>> GetAllTransactions(Pagination pagination);
+    Task<Dtos.BackOffice.BackOfficeCustomerDto?> GetCustomerById(Guid customerId);
+    Task<Dtos.BackOffice.BackOfficeTransactionDto?> GetTransactionById(Guid transactionId);
+    Task<IEnumerable<Dtos.BackOffice.BackOfficeTransactionDto>> GetTransactionsByCustomerGuid(Guid customerId, Pagination pagination);
+    Task<Dtos.BackOffice.BackOfficeTransactionDto?> SetTransactionToCustomer(SetTransactionToCustomerRequest setCustomerRequest);
 }
 
 

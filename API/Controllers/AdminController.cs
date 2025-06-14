@@ -10,14 +10,14 @@ public class AdminController(IAdminService adminService) : BaseController
 {
 
     [HttpGet("customers")]
-    [ProducesResponseType(typeof(IEnumerable<CustomerDto>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<BackOfficeCustomerDto>), 200)]
     public async Task<IActionResult> GetCustomers([FromQuery] Pagination pagination)
     {
         return Ok(await adminService.GetAllCustomers(pagination));
     }
 
     [HttpGet("customers/{customerId}")]
-    [ProducesResponseType(typeof(CustomerDto), 200)]
+    [ProducesResponseType(typeof(BackOfficeCustomerDto), 200)]
     public async Task<IActionResult> GetCustomerById(Guid customerId)
     {
         var customer = await adminService.GetCustomerById(customerId);
@@ -29,14 +29,14 @@ public class AdminController(IAdminService adminService) : BaseController
     }
 
     [HttpGet("customers/{customerId}/transactions")]
-    [ProducesResponseType(typeof(IEnumerable<TransactionDto>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<BackOfficeTransactionDto>), 200)]
     public async Task<IActionResult> GetCustomerTransactions(Guid customerId, [FromQuery] Pagination pagination)
     {
         return Ok(await adminService.GetTransactionsByCustomerGuid(customerId, pagination));
     }
 
     [HttpGet("transactions/{transactionId}")]
-    [ProducesResponseType(typeof(TransactionDto), 200)]
+    [ProducesResponseType(typeof(BackOfficeTransactionDto), 200)]
     public async Task<IActionResult> GetTransactionById(Guid transactionId)
     {
         var transaction = await adminService.GetTransactionById(transactionId);
@@ -48,7 +48,7 @@ public class AdminController(IAdminService adminService) : BaseController
     }
 
     [HttpPost("set-transaction-to-customer")]
-    [ProducesResponseType(typeof(TransactionDto), 200)]
+    [ProducesResponseType(typeof(BackOfficeTransactionDto), 200)]
     public async Task<IActionResult> SetTransactionToCustomer([FromBody] SetTransactionToCustomerRequest setCustomerRequest)
     {
         var transaction = await adminService.SetTransactionToCustomer(setCustomerRequest);
@@ -61,7 +61,7 @@ public class AdminController(IAdminService adminService) : BaseController
     }
 
     [HttpGet("transactions")]
-    [ProducesResponseType(typeof(IEnumerable<TransactionDto>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<BackOfficeTransactionDto>), 200)]
     public async Task<IActionResult> GetAllTransactions([FromQuery] Pagination pagination)
     {
         var transactions = await adminService.GetAllTransactions(pagination);

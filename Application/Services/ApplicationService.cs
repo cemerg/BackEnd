@@ -86,63 +86,63 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
 
 public class AdminService(IAdminContext adminContext, IUnitOfWork unitOfWork) : IAdminService
 {
-    public async Task<IEnumerable<CustomerDto>> GetAllCustomers(Pagination pagination)
+    public async Task<IEnumerable<BackOfficeCustomerDto>> GetAllCustomers(Pagination pagination)
     {
         var customers = await unitOfWork.CustomerRepository.GetAllAsync(pagination.Skip, pagination.Take);
         if (customers == null || !customers.Any())
         {
-            return new List<CustomerDto>();
+            return new List<BackOfficeCustomerDto>();
         }
-        return customers.Select(CustomerDto.FromEntity).ToList();
+        return customers.Select(BackOfficeCustomerDto.FromEntity).ToList();
     }
 
-    public async Task<IEnumerable<TransactionDto>> GetAllTransactions(Pagination pagination)
+    public async Task<IEnumerable<BackOfficeTransactionDto>> GetAllTransactions(Pagination pagination)
     {
         var transactions = await unitOfWork.TransactionRepository.GetAllAsync(pagination.Skip, pagination.Take);
         if (transactions == null || !transactions.Any())
         {
-            return new List<TransactionDto>();
+            return new List<BackOfficeTransactionDto>();
         }
-        return transactions.Select(TransactionDto.FromEntity).ToList();
+        return transactions.Select(BackOfficeTransactionDto.FromEntity).ToList();
     }
 
-    public async Task<CustomerDto?> GetCustomerById(Guid customerId)
+    public async Task<BackOfficeCustomerDto?> GetCustomerById(Guid customerId)
     {
         var customer = await unitOfWork.CustomerRepository.GetByIdAsync(customerId);
         if (customer == null)
         {
             return null;
         }
-        return CustomerDto.FromEntity(customer);
+        return BackOfficeCustomerDto.FromEntity(customer);
     }
 
-    public async Task<Application.Dtos.BackOffice.TransactionDto?> GetTransactionById(Guid transactionId)
+    public async Task<Application.Dtos.BackOffice.BackOfficeTransactionDto?> GetTransactionById(Guid transactionId)
     {
         var transaction = await unitOfWork.TransactionRepository.GetByIdAsync(transactionId);
         if (transaction == null)
         {
             return null;
         }
-        return Application.Dtos.BackOffice.TransactionDto.FromEntity(transaction);
+        return Application.Dtos.BackOffice.BackOfficeTransactionDto.FromEntity(transaction);
     }
 
-    public async Task<IEnumerable<Application.Dtos.BackOffice.TransactionDto>> GetTransactionsByCustomerGuid(Guid customerId, Pagination pagination)
+    public async Task<IEnumerable<Application.Dtos.BackOffice.BackOfficeTransactionDto>> GetTransactionsByCustomerGuid(Guid customerId, Pagination pagination)
     {
         var customer = await unitOfWork.CustomerRepository.GetByIdAsync(customerId);
         if (customer == null)
         {
-            return new List<Application.Dtos.BackOffice.TransactionDto>();
+            return new List<Application.Dtos.BackOffice.BackOfficeTransactionDto>();
         }
 
         var transactions = customer.Transactions
             .Skip(pagination.Skip)
             .Take(pagination.Take)
-            .Select(Application.Dtos.BackOffice.TransactionDto.FromEntity);
+            .Select(Application.Dtos.BackOffice.BackOfficeTransactionDto.FromEntity);
 
         return transactions.ToList();
     }
 
-    public async Task<Application.Dtos.BackOffice.TransactionDto?> SetTransactionToCustomer(SetTransactionToCustomerRequest setCustomerRequest)
+    public async Task<Application.Dtos.BackOffice.BackOfficeTransactionDto?> SetTransactionToCustomer(SetTransactionToCustomerRequest setCustomerRequest)
     {
         var transaction = await unitOfWork.TransactionRepository.GetByIdAsync(setCustomerRequest.TransactionId);
         if (transaction == null)
@@ -153,7 +153,7 @@ public class AdminService(IAdminContext adminContext, IUnitOfWork unitOfWork) : 
         transaction.SetCustomer(setCustomerRequest.CustomerId);
         await unitOfWork.SaveChangesAsync();
 
-        return Application.Dtos.BackOffice.TransactionDto.FromEntity(transaction);
+        return Application.Dtos.BackOffice.BackOfficeTransactionDto.FromEntity(transaction);
     }
 }
 
