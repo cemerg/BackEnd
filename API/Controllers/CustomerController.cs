@@ -1,4 +1,3 @@
-using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Dtos.WebSite;
@@ -18,6 +17,16 @@ public class CustomerController(ICustomerService customerService) : BaseControll
         return Ok(transactions);
     }
 
+    [HttpGet("transactions/{transactionId}")]
+    [ProducesResponseType(typeof(TransactionDto), 200)]
+    public async Task<IActionResult> GetTransaction(Guid transactionId)
+    {
+        var transaction = await customerService.GetTransaction(transactionId);
+        return Ok(transaction);
+    }
+
+
+
 
     [HttpGet]
     [ProducesResponseType(typeof(CustomerDto), 200)]
@@ -28,7 +37,7 @@ public class CustomerController(ICustomerService customerService) : BaseControll
         {
             return NotFound();
         }
-        
+
         return Ok(customer);
     }
 
@@ -59,5 +68,14 @@ public class CustomerController(ICustomerService customerService) : BaseControll
     {
         await customerService.RedeemPoints(request);
         return Ok(await customerService.GetCustomer());
+    }
+
+    [HttpPost("set-transaction")]
+    [ProducesResponseType(typeof(TransactionDto), 200)]
+    public async Task<IActionResult> SetTransaction([FromBody] SetTransactionRequest setTransactionRequest)
+    {
+        await customerService.SetTransaction(setTransactionRequest);
+        var transaction = await customerService.GetTransaction(setTransactionRequest.TransactionId);
+        return Ok(transaction);
     }
 }

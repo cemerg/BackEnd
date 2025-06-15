@@ -1,5 +1,4 @@
 using Application.Dtos.BackOffice;
-using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -66,6 +65,15 @@ public class AdminController(IAdminService adminService) : BaseController
     {
         var transactions = await adminService.GetAllTransactions(pagination);
         return Ok(transactions);
+    }
+
+    [HttpPost("transaction")]
+    [ProducesResponseType(typeof(BackOfficeTransactionDto), 200)]
+    public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionRequest createTransactionRequest)
+    {
+        var transactionId = await adminService.CreateTransaction(createTransactionRequest);
+        var transaction = await adminService.GetTransactionById(transactionId);
+        return Ok(transaction);
     }
 
 }

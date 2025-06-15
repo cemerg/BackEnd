@@ -14,3 +14,13 @@ public class TransactionCreatedEvent
         CreatedAt = createdAt;
     }
 }
+
+public class SetTransactionToCustomerCompletedEvent
+{
+    public Guid TransactionId { get; }
+
+    public SetTransactionToCustomerCompletedEvent(Guid transactionId)
+    {
+        TransactionId = transactionId;
+    }
+}

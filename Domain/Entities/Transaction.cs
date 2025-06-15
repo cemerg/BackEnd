@@ -10,13 +10,13 @@ public class Transaction : BaseEntity, IDateTimeEntity
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<TransactionProduct> TransactionProducts { get; set; } = new List<TransactionProduct>();
 
-    public static Transaction Create(TransactionType transactionType)
+    public static Transaction Create(TransactionType transactionType, Guid? customerId)
     {
         return new Transaction
         {
             Id = Guid.NewGuid(),
             Type = transactionType,
-            CreatedAt = DateTime.UtcNow,
+            CustomerId = customerId
         };
     }
 
@@ -28,6 +28,11 @@ public class Transaction : BaseEntity, IDateTimeEntity
 
     public void SetCustomer(Guid customerId)
     {
+        if (CustomerId.HasValue && CustomerId != customerId)
+        {
+            throw new InvalidOperationException("Transaction is already assigned to another customer.");
+        }
+        
         CustomerId = customerId;
     }
 

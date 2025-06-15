@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 public class ProductDto
 {
     public required string Name { get; set; }

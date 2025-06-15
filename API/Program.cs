@@ -54,6 +54,7 @@ builder.Services.AddSwaggerGen();
 // Dependency Injection
 builder.Services.AddSingleton<IEventPublisher, ConsoleEventPublisher>();
 
+
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -71,10 +72,7 @@ builder.Services.AddScoped<IAdminContext, AdminContext>();
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-
-
 var app = builder.Build();
-
 
 app.UseSwagger();
 app.UseSwaggerUI();

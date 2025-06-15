@@ -1,5 +1,6 @@
 public class CreateTransactionRequest
 {
+    public Guid? CustomerId { get; set; }
     public List<TransactionProductRequest> TransactionProducts { get; set; } = new List<TransactionProductRequest>();
 }
 
@@ -15,6 +16,11 @@ public class SetTransactionToCustomerRequest
     public Guid TransactionId { get; set; }
 }
 
+
+public class SetTransactionRequest
+{
+    public Guid TransactionId { get; set; }
+}
 
 public class RedeemPointsRequest
 {
