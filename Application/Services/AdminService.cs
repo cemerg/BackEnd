@@ -37,6 +37,7 @@ public class AdminService(IAdminContext adminContext, IUnitOfWork unitOfWork) : 
         return customers.Select(BackOfficeCustomerDto.FromEntity).ToList();
     }
 
+
     public async Task<IEnumerable<BackOfficeTransactionDto>> GetAllTransactions(Pagination pagination)
     {
         var transactions = await unitOfWork.TransactionRepository.GetAllAsync(pagination.Skip, pagination.Take);
