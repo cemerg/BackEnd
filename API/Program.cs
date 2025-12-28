@@ -50,6 +50,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthorization();
 
 // Dependency Injection
 builder.Services.AddSingleton<IEventPublisher, ConsoleEventPublisher>();
